@@ -1,0 +1,988 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Antonio:wght@100..700&family=Bebas+Neue&family=Capriola&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Passion+One:wght@400;700;900&display=swap"
+  rel="stylesheet"
+>
+<style>
+  .mega-menu {
+    --menu-bg: #ffffff;
+    --menu-text: #3a3a3a;
+    --menu-title: #222222;
+    --menu-muted: #6b6b6b;
+    --menu-label: #9a9a9a;
+    --menu-accent: #4f46e5;
+    --menu-badge: #5b4fe0;
+    --menu-hover: #ececec;
+    --menu-border: #e6e6e6;
+    --menu-font: 'Inter';
+    --menu-radius: 12px;
+    --menu-radius-small: 8px;
+    --menu-bar-height: 52px;
+    --menu-panel-gap: 37px;
+    --menu-panel-padding: 24px;
+
+    --menu-link-size: 16px;
+    --menu-link-color: var(--menu-text);
+
+    --menu-cta-size: 14px;
+    --menu-cta-color: var(--menu-title);
+
+    --menu-heading-size: 14px;
+    --menu-heading-color: var(--menu-label);
+
+    --menu-card-title-size: 16px;
+    --menu-card-title-color: var(--menu-title);
+
+    --menu-card-text-size: 12px;
+    --menu-card-text-color: #4F4F4F;
+
+    --menu-explore-title-size: 15px;
+    --menu-explore-title-color: var(--menu-title);
+
+    --menu-explore-text-size: 12px;
+    --menu-explore-text-color: var(--menu-muted);
+
+    --menu-explore-link-size: 16px;
+    --menu-explore-link-color: #4C55FF;
+
+    --menu-footer-text-size: 14px;
+    --menu-footer-text-color: var(--menu-title);
+
+    --menu-footer-link-color: var(--menu-label);
+    --menu-footer-button-size: 14px;
+    --menu-footer-button-color: var(--menu-title);
+
+    position: relative;
+    z-index: 50;
+    padding: 12px 0;
+    font-family: var(--menu-font);
+    color: var(--menu-text);
+  }
+
+  .mega-menu__container {
+    box-shadow: 0px 8px 10px 0px #4C55FF0F;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .mega-menu__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: var(--menu-bar-height);
+    padding: 0 12px;
+    background: var(--menu-bg);
+    border-radius: var(--menu-radius);
+    box-shadow: var(--menu-shadow);
+  }
+
+  .mega-menu__logo {
+    display: none;
+    align-items: center;
+    color: inherit;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mega-menu__logo-image {
+    height: 28px;
+    width: auto;
+  }
+
+  .mega-menu__nav {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .mega-menu__list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mega-menu__item {
+    display: flex;
+    align-items: center;
+    border-radius: var(--menu-radius-small);
+    transition: background 0.15s;
+  }
+
+  .mega-menu__item:hover,
+  .mega-menu__item.is-open {
+    background: var(--menu-hover);
+  }
+
+  .mega-menu__link {
+    padding: 8px 12px;
+    font-size: var(--menu-link-size);
+    font-weight: 400;
+    color: var(--menu-link-color);
+    text-decoration: none;
+  }
+
+  .mega-menu__item--has-panel .mega-menu__link {
+    padding-right: 6px;
+  }
+
+  .mega-menu__toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px 8px 0;
+    background: none;
+    border: 0;
+    color: var(--menu-label);
+    cursor: pointer;
+  }
+
+  .mega-menu__toggle svg {
+    transition: transform 0.2s ease;
+  }
+
+  .mega-menu__item.is-open .mega-menu__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .mega-menu__cta {
+    padding: 8px 18px;
+    border-radius: var(--menu-radius-small);
+    background: var(--menu-hover);
+    color: var(--menu-cta-color);
+    font-size: var(--menu-cta-size);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .mega-menu__panel {
+    position: absolute;
+    top: calc(100% + var(--menu-panel-gap));
+    left: 0;
+    right: 0;
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
+    border-radius: var(--menu-radius);
+    box-shadow: var(--menu-shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+  }
+
+  .mega-menu__panel::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--menu-panel-gap) * -1);
+    left: 0;
+    right: 0;
+    height: var(--menu-panel-gap);
+  }
+
+  .mega-menu__item.is-open > .mega-menu__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .mega-menu__panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    column-gap: 48px;
+    padding: var(--menu-panel-padding);
+  }
+
+  .mega-menu__heading {
+    margin: 0 0 16px;
+    font-size: var(--menu-heading-size);
+    color: var(--menu-heading-color);
+  }
+
+  .mega-menu__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mega-menu__card-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--menu-radius-small);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .mega-menu__card-link:hover,
+  .mega-menu__card-link:focus-visible {
+    background: var(--menu-hover);
+  }
+
+  .mega-menu__card-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+  }
+
+  .mega-menu__card-icon img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .mega-menu__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mega-menu__card-title {
+    font-size: var(--menu-card-title-size);
+    font-weight: 400;
+    color: var(--menu-card-title-color);
+  }
+
+  .mega-menu__card-text {
+    font-size: var(--menu-card-text-size);
+    line-height: 1.2;
+    color: var(--menu-card-text-color);
+  }
+
+  .mega-menu__explore-media {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--menu-hover);
+  }
+
+  .mega-menu__explore-video,
+  .mega-menu__explore-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mega-menu__explore-title {
+    margin: 12px 0 2px;
+    font-size: var(--menu-explore-title-size);
+    font-weight: 500;
+    color: var(--menu-explore-title-color);
+  }
+
+  .mega-menu__explore-text {
+    margin: 0 0 12px;
+    font-size: var(--menu-explore-text-size);
+    line-height: 1.4;
+    color: var(--menu-explore-text-color);
+  }
+
+  .mega-menu__explore-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--menu-explore-link-size);
+    font-weight: 500;
+    color: var(--menu-explore-link-color);
+    text-decoration: none;
+  }
+
+  .mega-menu__footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--menu-border);
+  }
+
+  .mega-menu__footer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mega-menu__footer-badge {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--menu-badge);
+  }
+
+  .mega-menu__footer-badge img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .mega-menu__footer-text {
+    margin: 0;
+    font-size: var(--menu-footer-text-size);
+    color: var(--menu-footer-text-color);
+  }
+
+  .mega-menu__footer-link {
+    margin-left: 4px;
+    color: var(--menu-footer-link-color);
+    text-decoration: none;
+  }
+
+  .mega-menu__footer-button {
+    padding: 8px 20px;
+    border-radius: var(--menu-radius-small);
+    background: linear-gradient(180deg, #FFFFFF 0%, #F4F4F4 54.5%, #E5E5E5 82.5%, #FFFFFF 100%);
+    color: var(--menu-footer-button-color);
+    font-size: var(--menu-footer-button-size);
+    text-decoration: none;
+  }
+
+  .mega-menu__burger {
+    display: none;
+  }
+
+  .mega-menu :focus-visible {
+    outline: 2px solid var(--menu-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 989px) {
+    .mega-menu__burger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-left: auto;
+      background: none;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .mega-menu__burger-icon,
+    .mega-menu__burger-icon::before,
+    .mega-menu__burger-icon::after {
+      content: '';
+      display: block;
+      position: relative;
+      width: 22px;
+      height: 2px;
+      background: var(--menu-text);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .mega-menu__burger-icon::before {
+      position: absolute;
+      top: -7px;
+    }
+
+    .mega-menu__burger-icon::after {
+      position: absolute;
+      top: 7px;
+    }
+
+    .mega-menu__burger[aria-expanded='true'] .mega-menu__burger-icon {
+      background: transparent;
+    }
+
+    .mega-menu__burger[aria-expanded='true'] .mega-menu__burger-icon::before {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .mega-menu__burger[aria-expanded='true'] .mega-menu__burger-icon::after {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mega-menu__nav {
+      display: none;
+      position: absolute;
+      top: calc(100% + var(--menu-panel-gap));
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 0;
+      max-height: calc(100vh - 100px);
+      padding: 8px 16px 16px;
+      overflow-y: auto;
+      background: var(--menu-bg);
+      border-radius: var(--menu-radius);
+      box-shadow: var(--menu-shadow);
+    }
+
+    .mega-menu.is-mobile-open .mega-menu__nav {
+      display: flex;
+    }
+
+    .mega-menu__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .mega-menu__item {
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--menu-border);
+      border-radius: 0;
+    }
+
+    .mega-menu__item:hover,
+    .mega-menu__item.is-open {
+      background: none;
+    }
+
+    .mega-menu__link {
+      flex: 1;
+      padding: 16px 0;
+    }
+
+    .mega-menu__toggle {
+      padding: 16px 8px;
+    }
+
+    .mega-menu__panel {
+      display: none;
+      position: static;
+      flex: 0 0 100%;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    .mega-menu__panel::before {
+      display: none;
+    }
+
+    .mega-menu__item.is-open > .mega-menu__panel {
+      display: block;
+    }
+
+    .mega-menu__panel-grid {
+      grid-template-columns: 1fr;
+      padding: 0 0 16px;
+    }
+
+    .mega-menu__cards {
+      grid-template-columns: 1fr;
+    }
+
+    .mega-menu__card-link {
+      padding: 12px 0;
+    }
+
+    .mega-menu__footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .mega-menu__explore {
+      display: none;
+    }
+
+    .mega-menu__cta {
+      margin-top: 16px;
+      text-align: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mega-menu__panel,
+    .mega-menu__toggle svg {
+      transition: none;
+    }
+  }
+</style>
+
+{%- assign menu = linklists[section.settings.menu] -%}
+
+<header
+  class="mega-menu"
+  id="mega-menu-{{ section.id }}"
+  data-mega-menu
+  style="
+    --menu-link-size: {{ section.settings.font_link_size }}px;
+    --menu-link-color: {{ section.settings.color_link }};
+    --menu-cta-size: {{ section.settings.font_cta_size }}px;
+    --menu-cta-color: {{ section.settings.color_cta }};
+    --menu-heading-size: {{ section.settings.font_heading_size }}px;
+    --menu-heading-color: {{ section.settings.color_heading }};
+    --menu-card-title-size: {{ section.settings.font_card_title_size }}px;
+    --menu-card-title-color: {{ section.settings.color_card_title }};
+    --menu-card-text-size: {{ section.settings.font_card_text_size }}px;
+    --menu-card-text-color: {{ section.settings.color_card_text }};
+    --menu-explore-title-size: {{ section.settings.font_explore_title_size }}px;
+    --menu-explore-title-color: {{ section.settings.color_explore_title }};
+    --menu-explore-text-size: {{ section.settings.font_explore_text_size }}px;
+    --menu-explore-text-color: {{ section.settings.color_explore_text }};
+    --menu-explore-link-size: {{ section.settings.font_explore_link_size }}px;
+    --menu-explore-link-color: {{ section.settings.color_explore_link }};
+    --menu-footer-text-size: {{ section.settings.font_footer_text_size }}px;
+    --menu-footer-text-color: {{ section.settings.color_footer_text }};
+    --menu-footer-link-color: {{ section.settings.color_footer_link }};
+    --menu-footer-button-size: {{ section.settings.font_footer_button_size }}px;
+    --menu-footer-button-color: {{ section.settings.color_footer_button }};
+  "
+>
+  <div class="mega-menu__container page-width">
+    <div class="mega-menu__bar">
+      <a class="mega-menu__logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 240
+            | image_tag: loading: 'eager', alt: shop.name, class: 'mega-menu__logo-image'
+          }}
+        {%- else -%}
+          <span>{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+
+      <button
+        class="mega-menu__burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mega-menu-nav-{{ section.id }}"
+        data-menu-burger
+      >
+        <span class="visually-hidden">Menu</span>
+        <span class="mega-menu__burger-icon" aria-hidden="true"></span>
+      </button>
+
+      <nav class="mega-menu__nav" id="mega-menu-nav-{{ section.id }}" aria-label="Main">
+        <ul class="mega-menu__list">
+          {%- for link in menu.links -%}
+            {%- assign panel = null -%}
+            {%- assign link_title = link.title | downcase -%}
+
+            {%- for block in section.blocks -%}
+              {%- assign block_key = block.settings.menu_item | strip | downcase -%}
+              {%- if block_key != blank -%}
+                {%- assign block_handle = block_key | handleize -%}
+                {%- if block_key == link_title or block_handle == link.handle -%}
+                  {%- assign panel = block -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            <li
+              class="mega-menu__item{% if panel %} mega-menu__item--has-panel{% endif %}"
+              {% if panel %}
+                data-menu-item
+              {% endif %}
+            >
+              <a
+                class="mega-menu__link"
+                href="{{ link.url }}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title -}}
+              </a>
+
+              {%- if panel -%}
+                <button
+                  class="mega-menu__toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="mega-menu-panel-{{ panel.id }}"
+                  data-menu-toggle
+                >
+                  <span class="visually-hidden">Toggle {{ link.title }} menu</span>
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                    <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+
+                <div class="mega-menu__panel" id="mega-menu-panel-{{ panel.id }}" {{ panel.shopify_attributes }}>
+                  <div class="mega-menu__panel-grid">
+                    <div class="mega-menu__features">
+                      <p class="mega-menu__heading">{{ link.title }}</p>
+
+                      <ul class="mega-menu__cards">
+                        {%- for index in (1..6) -%}
+                          {%- assign title_key = 'item_' | append: index | append: '_title' -%}
+                          {%- assign text_key = 'item_' | append: index | append: '_desc' -%}
+                          {%- assign link_key = 'item_' | append: index | append: '_link' -%}
+                          {%- assign icon_key = 'item_' | append: index | append: '_icon' -%}
+                          {%- assign card_title = panel.settings[title_key] -%}
+                          {%- assign card_text = panel.settings[text_key] -%}
+                          {%- assign card_icon = panel.settings[icon_key] -%}
+
+                          {%- if card_title != blank -%}
+                            <li class="mega-menu__card">
+                              <a class="mega-menu__card-link" href="{{ panel.settings[link_key] | default: '#' }}">
+                                {%- if card_icon != blank -%}
+                                  <span class="mega-menu__card-icon">
+                                    {{ card_icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: '' }}
+                                  </span>
+                                {%- endif -%}
+                                <span class="mega-menu__card-body">
+                                  <span class="mega-menu__card-title">{{ card_title }}</span>
+                                  {%- if card_text != blank -%}
+                                    <span class="mega-menu__card-text">{{ card_text }}</span>
+                                  {%- endif -%}
+                                </span>
+                              </a>
+                            </li>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+
+                    <aside class="mega-menu__explore">
+                      <p class="mega-menu__heading">{{ panel.settings.explore_label | default: 'Explore' }}</p>
+
+                      {%- assign explore_video = panel.settings.explore_video -%}
+                      {%- assign explore_image = panel.settings.explore_image -%}
+
+                      <a
+                        class="mega-menu__explore-media"
+                        href="{{ panel.settings.explore_link | default: '#' }}"
+                        tabindex="-1"
+                        aria-hidden="true"
+                      >
+                        {%- if explore_video != blank -%}
+                          <video
+                            class="mega-menu__explore-video"
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            preload="metadata"
+                            {% if explore_video.preview_image %}
+                              poster="{{ explore_video.preview_image | image_url: width: 800 }}"
+                            {% endif %}
+                          >
+                            {%- for source in explore_video.sources -%}
+                              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                            {%- endfor -%}
+                          </video>
+                        {%- elsif explore_image != blank -%}
+                          {{
+                            explore_image
+                            | image_url: width: 800
+                            | image_tag:
+                              loading: 'lazy',
+                              alt: panel.settings.explore_title,
+                              class: 'mega-menu__explore-image'
+                          }}
+                        {%- endif -%}
+                      </a>
+
+                      {%- if panel.settings.explore_title != blank -%}
+                        <h3 class="mega-menu__explore-title">{{ panel.settings.explore_title }}</h3>
+                      {%- endif -%}
+
+                      {%- if panel.settings.explore_text != blank -%}
+                        <p class="mega-menu__explore-text">{{ panel.settings.explore_text }}</p>
+                      {%- endif -%}
+
+                      {%- if panel.settings.explore_link_label != blank -%}
+                        <a class="mega-menu__explore-link" href="{{ panel.settings.explore_link | default: '#' }}">
+                          {{ panel.settings.explore_link_label }}
+                          <svg width="8" height="12" viewBox="0 0 8 12" fill="none" aria-hidden="true">
+                            <path d="M1.5 1L6.5 6L1.5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </a>
+                      {%- endif -%}
+                    </aside>
+
+                    {%- if panel.settings.footer_text != blank or panel.settings.footer_button_label != blank -%}
+                      <div class="mega-menu__footer">
+                        <div class="mega-menu__footer-info">
+                          <span class="mega-menu__footer-badge">
+                            {%- if panel.settings.footer_icon != blank -%}
+                              {{
+                                panel.settings.footer_icon
+                                | image_url: width: 64
+                                | image_tag: loading: 'lazy', alt: ''
+                              }}
+                            {%- endif -%}
+                          </span>
+                          <p class="mega-menu__footer-text">
+                            {{ panel.settings.footer_text }}
+                            {%- if panel.settings.footer_link_label != blank %}
+                              <a class="mega-menu__footer-link" href="{{ panel.settings.footer_link | default: '#' }}">
+                                {{- panel.settings.footer_link_label -}}
+                              </a>
+                            {%- endif -%}
+                          </p>
+                        </div>
+
+                        {%- if panel.settings.footer_button_label != blank -%}
+                          <a
+                            class="mega-menu__footer-button"
+                            href="{{ panel.settings.footer_button_link | default: '#' }}"
+                          >
+                            {{- panel.settings.footer_button_label -}}
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if section.settings.cta_label != blank -%}
+          <a class="mega-menu__cta" href="{{ section.settings.cta_link | default: '#' }}">
+            {{- section.settings.cta_label -}}
+          </a>
+        {%- endif -%}
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  (function () {
+    var desktopQuery = window.matchMedia('(min-width: 990px)');
+    var closeDelay = 120;
+
+    function setupMegaMenu(menu) {
+      if (menu.dataset.ready === 'true') return;
+      menu.dataset.ready = 'true';
+
+      var items = Array.from(menu.querySelectorAll('[data-menu-item]'));
+      var burger = menu.querySelector('[data-menu-burger]');
+      var closeTimer = null;
+
+      function setItemState(item, isOpen) {
+        var toggle = item.querySelector('[data-menu-toggle]');
+        var video = item.querySelector('video');
+
+        item.classList.toggle('is-open', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+
+        if (!video) return;
+
+        if (isOpen) {
+          video.play().catch(function () {});
+        } else {
+          video.pause();
+        }
+      }
+
+      function closeAllItems(exceptItem) {
+        items.forEach(function (item) {
+          if (item !== exceptItem) setItemState(item, false);
+        });
+      }
+
+      function closeMobileNav() {
+        menu.classList.remove('is-mobile-open');
+        if (burger) burger.setAttribute('aria-expanded', 'false');
+      }
+
+      items.forEach(function (item) {
+        var toggle = item.querySelector('[data-menu-toggle]');
+
+        item.addEventListener('mouseenter', function () {
+          if (!desktopQuery.matches) return;
+          clearTimeout(closeTimer);
+          closeAllItems(item);
+          setItemState(item, true);
+        });
+
+        item.addEventListener('mouseleave', function () {
+          if (!desktopQuery.matches) return;
+          closeTimer = setTimeout(function () {
+            setItemState(item, false);
+          }, closeDelay);
+        });
+
+        toggle.addEventListener('click', function () {
+          var shouldOpen = !item.classList.contains('is-open');
+          if (desktopQuery.matches) closeAllItems(item);
+          setItemState(item, shouldOpen);
+        });
+      });
+
+      if (burger) {
+        burger.addEventListener('click', function () {
+          var shouldOpen = !menu.classList.contains('is-mobile-open');
+          menu.classList.toggle('is-mobile-open', shouldOpen);
+          burger.setAttribute('aria-expanded', String(shouldOpen));
+        });
+      }
+
+      document.addEventListener('click', function (event) {
+        if (menu.contains(event.target)) return;
+        closeAllItems();
+        closeMobileNav();
+      });
+
+      menu.addEventListener('keydown', function (event) {
+        if (event.key !== 'Escape') return;
+        closeAllItems();
+        closeMobileNav();
+      });
+
+      menu.addEventListener('focusout', function (event) {
+        var nextTarget = event.relatedTarget;
+        if (desktopQuery.matches && nextTarget && !menu.contains(nextTarget)) {
+          closeAllItems();
+        }
+      });
+
+      desktopQuery.addEventListener('change', function () {
+        closeAllItems();
+        closeMobileNav();
+      });
+
+      menu.querySelectorAll('video').forEach(function (video) {
+        video.pause();
+      });
+    }
+
+    function setupAllMenus() {
+      document.querySelectorAll('[data-mega-menu]').forEach(setupMegaMenu);
+    }
+
+    setupAllMenus();
+    document.addEventListener('shopify:section:load', setupAllMenus);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mega header",
+  "tag": "section",
+  "class": "section-mega-header",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "header", "content": "Header" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu" },
+    { "type": "text", "id": "cta_label", "label": "Button label" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+
+    { "type": "header", "content": "Typography — Nav link" },
+    { "type": "range", "id": "font_link_size", "label": "Nav link size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 16 },
+    { "type": "color", "id": "color_link", "label": "Nav link color", "default": "#3a3a3a" },
+
+    { "type": "header", "content": "Typography — CTA button" },
+    { "type": "range", "id": "font_cta_size", "label": "CTA size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "color", "id": "color_cta", "label": "CTA color", "default": "#222222" },
+
+    { "type": "header", "content": "Typography — Panel heading" },
+    { "type": "range", "id": "font_heading_size", "label": "Heading size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "color", "id": "color_heading", "label": "Heading color", "default": "#9a9a9a" },
+
+    { "type": "header", "content": "Typography — Card" },
+    { "type": "range", "id": "font_card_title_size", "label": "Card title size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 16 },
+    { "type": "color", "id": "color_card_title", "label": "Card title color", "default": "#222222" },
+    { "type": "range", "id": "font_card_text_size", "label": "Card text size", "min": 8, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "color", "id": "color_card_text", "label": "Card text color", "default": "#4F4F4F" },
+
+    { "type": "header", "content": "Typography — Explore block" },
+    { "type": "range", "id": "font_explore_title_size", "label": "Explore title size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 15 },
+    { "type": "color", "id": "color_explore_title", "label": "Explore title color", "default": "#222222" },
+    { "type": "range", "id": "font_explore_text_size", "label": "Explore text size", "min": 8, "max": 18, "step": 1, "unit": "px", "default": 12 },
+    { "type": "color", "id": "color_explore_text", "label": "Explore text color", "default": "#6b6b6b" },
+    { "type": "range", "id": "font_explore_link_size", "label": "Explore link size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 16 },
+    { "type": "color", "id": "color_explore_link", "label": "Explore link color", "default": "#4C55FF" },
+
+    { "type": "header", "content": "Typography — Footer row" },
+    { "type": "range", "id": "font_footer_text_size", "label": "Footer text size", "min": 8, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "color", "id": "color_footer_text", "label": "Footer text color", "default": "#222222" },
+    { "type": "color", "id": "color_footer_link", "label": "Footer inline link color", "default": "#9a9a9a" },
+    { "type": "range", "id": "font_footer_button_size", "label": "Footer button size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 14 },
+    { "type": "color", "id": "color_footer_button", "label": "Footer button color", "default": "#222222" }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Mega panel",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Type the exact title or handle of the top-level menu item this panel belongs to (e.g. \"Features\" or \"features\")."
+        },
+        { "type": "text", "id": "menu_item", "label": "Menu item (title or handle)" },
+
+        { "type": "header", "content": "Card 1" },
+        { "type": "image_picker", "id": "item_1_icon", "label": "Icon" },
+        { "type": "text", "id": "item_1_title", "label": "Title" },
+        { "type": "text", "id": "item_1_desc", "label": "Description" },
+        { "type": "url", "id": "item_1_link", "label": "Link" },
+
+        { "type": "header", "content": "Card 2" },
+        { "type": "image_picker", "id": "item_2_icon", "label": "Icon" },
+        { "type": "text", "id": "item_2_title", "label": "Title" },
+        { "type": "text", "id": "item_2_desc", "label": "Description" },
+        { "type": "url", "id": "item_2_link", "label": "Link" },
+
+        { "type": "header", "content": "Card 3" },
+        { "type": "image_picker", "id": "item_3_icon", "label": "Icon" },
+        { "type": "text", "id": "item_3_title", "label": "Title" },
+        { "type": "text", "id": "item_3_desc", "label": "Description" },
+        { "type": "url", "id": "item_3_link", "label": "Link" },
+
+        { "type": "header", "content": "Card 4" },
+        { "type": "image_picker", "id": "item_4_icon", "label": "Icon" },
+        { "type": "text", "id": "item_4_title", "label": "Title" },
+        { "type": "text", "id": "item_4_desc", "label": "Description" },
+        { "type": "url", "id": "item_4_link", "label": "Link" },
+
+        { "type": "header", "content": "Card 5" },
+        { "type": "image_picker", "id": "item_5_icon", "label": "Icon" },
+        { "type": "text", "id": "item_5_title", "label": "Title" },
+        { "type": "text", "id": "item_5_desc", "label": "Description" },
+        { "type": "url", "id": "item_5_link", "label": "Link" },
+
+        { "type": "header", "content": "Card 6" },
+        { "type": "image_picker", "id": "item_6_icon", "label": "Icon" },
+        { "type": "text", "id": "item_6_title", "label": "Title" },
+        { "type": "text", "id": "item_6_desc", "label": "Description" },
+        { "type": "url", "id": "item_6_link", "label": "Link" },
+
+        { "type": "header", "content": "Explore" },
+        { "type": "text", "id": "explore_label", "label": "Small label", "default": "Explore" },
+        { "type": "video", "id": "explore_video", "label": "Video (autoplays, looped, muted)" },
+        { "type": "image_picker", "id": "explore_image", "label": "Image (used if no video)" },
+        { "type": "text", "id": "explore_title", "label": "Title" },
+        { "type": "textarea", "id": "explore_text", "label": "Text" },
+        { "type": "text", "id": "explore_link_label", "label": "Link label" },
+        { "type": "url", "id": "explore_link", "label": "Link" },
+
+        { "type": "header", "content": "Footer row" },
+        { "type": "image_picker", "id": "footer_icon", "label": "Icon (round badge)" },
+        { "type": "text", "id": "footer_text", "label": "Text" },
+        { "type": "text", "id": "footer_link_label", "label": "Inline link label" },
+        { "type": "url", "id": "footer_link", "label": "Inline link" },
+        { "type": "text", "id": "footer_button_label", "label": "Button label" },
+        { "type": "url", "id": "footer_button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Mega header" }]
+}
+{% endschema %}
